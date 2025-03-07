@@ -1,0 +1,2 @@
+# wpcs
+Wordpress CVE-Scan
