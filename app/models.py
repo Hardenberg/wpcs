@@ -1,0 +1,26 @@
+from django.db import models
+
+class DNS(models.Model):
+    dns = models.CharField(max_length=200, null=False,blank=False)
+    tld = models.CharField(max_length=10, null=False,blank=False)
+    ip = models.CharField(max_length=200, null=False,blank=False)
+    data = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.dns
+    
+class Setting(models.Model):
+    key = models.CharField(max_length=200, null=False, blank=False)
+    value = models.CharField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return self.key
+
+class Http(models.Model):
+    dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE)
+    http = models.BooleanField()
+    https = models.BooleanField()
+    checked = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return super().__str__()
