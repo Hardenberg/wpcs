@@ -8,4 +8,3 @@ def execute(list):
            tld=item['tld'],
            ip=item['ip']
         )
-    pass

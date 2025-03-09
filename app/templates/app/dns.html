@@ -11,6 +11,9 @@
                 <th scope="col"> TLD </th>
                 <th scope="col"> IP </th>
                 <th scope="col"> Datum </th>
+                <th scope="col"> HTTP </th>
+                <th scope="col"> HTTPS </th>
+                
             </tr>
         </thead>
         <tbody>
@@ -20,6 +23,8 @@
                 <td> {{item.tld}} </td>
                 <td> {{item.ip}} </td>
                 <td> {{item.data}} </td>
+                <td> {{item.http.http}} </td>
+                <td> {{item.http.https}} </td>
             </tr>
             {% endfor %}
         </tbody>

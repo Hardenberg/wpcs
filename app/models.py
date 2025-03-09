@@ -7,7 +7,7 @@ class DNS(models.Model):
     data = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.dns
+        return super().__str__()
     
 class Setting(models.Model):
     key = models.CharField(max_length=200, null=False, blank=False)
@@ -21,6 +21,13 @@ class Http(models.Model):
     http = models.BooleanField()
     https = models.BooleanField()
     checked = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return super().__str__()
+    
+class Wordpress(models.Model):
+    dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE)
+    version = models.CharField(max_length=200, null=False, blank=False)
 
     def __str__(self):
         return super().__str__()

@@ -1,6 +1,6 @@
 from celery import shared_task
 import datetime
-from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http
+from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress
 
 @shared_task
 def print_zeit():
@@ -14,5 +14,12 @@ def find_valid_dns():
     schreibe_dns_use_case.execute(list)
     return list
 
+@shared_task
 def evaluate_http():
+    print('evaluate HTTPs')
     evaluiere_http.execute()
+
+@shared_task
+def find_wordpress():
+    print('find Wordpress')
+    evaluiere_wordpress.execute()

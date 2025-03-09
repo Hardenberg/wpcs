@@ -22,7 +22,7 @@ def is_valid(item):
         ip_adresse = socket.gethostbyname(hostname)
         return {
             'valid': True,
-            'hostname': hostname,
+            'hostname': item,
             'tld': TLD,
             'ip': ip_adresse
         }
