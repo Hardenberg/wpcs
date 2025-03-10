@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "app.apps.AppConfig",
     'django_celery_results',
     'django_celery_beat',
+    'django_tables2'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,11 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+DJANGO_TABLES2_TABLE_ATTRS =  {
+    'class' : "table table-striped table-hover table-bordered",
+    'thead': {
+        'class': 'table-light',
+    },
+    'tr': "text-center align-middle"
+}

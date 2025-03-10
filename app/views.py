@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from . models import *
+from .tables.wordpress_table import WordpressTable
+from .tables.dns_table import DNSTable
+from django_tables2 import SingleTableView
 
 def app(request):
     dns = DNS.objects.count()
@@ -14,39 +17,15 @@ def app(request):
     }
     return render(request, 'app/app.html', ctx)
 
-def dns(request):
-    result = []
-    dns = DNS.objects.all()[:200]
-    for item in dns:
-        try:
-            http = Http.objects.get(dnsId_id=item.id)
-        except:
-            http = {}
+class DNSListView(SingleTableView):
+    model = DNS
+    table_class = DNSTable
+    template_name = "app/dns.html"
 
-        item.http = http
-        result.append(item)
-    ctx = {'dns': result}
-    print(dns[0].http.__dict__.keys())
-    return render(request, 'app/dns.html', ctx)
+class WordpressListView(SingleTableView):
+    model = Wordpress
+    table_class = WordpressTable
+    template_name = "app/wordpress.html"
 
-
-def wordpress(request):
-    result = []
-    wp = Wordpress.objects.all()
-    for item in wp:
-        try:
-            dns = DNS.objects.get(id=item.dnsId_id)
-        except:
-            continue
-        if item.version == '-':
-            continue
-        result.append({
-            'uri': dns.dns + '.' + dns.tld,
-            'uri_complete': 'https://'+dns.dns + '.' + dns.tld,
-            'version': item.version,
-            'user_enumeration':item.user_enumeration
-            
-        })
-    print(result[0]['version'])
-    ctx = {'result': result}
-    return render(request,'app/wordpress.html', ctx)
+    def get_queryset(self):
+        return Wordpress.objects.all().exclude(version = '-').exclude(version__isnull=True)

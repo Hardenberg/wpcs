@@ -1,36 +1,22 @@
 {% extends 'app/index.html' %}
-
+{% load render_table from django_tables2 %}
 {% block content %}
-<div class="container">
-    <h2 class="mb-4 text-center">Wordpress Übersicht</h2>
-    <table class="table table-striped table-hover table-bordered" ata-toggle="table"
-    data-search="true"
-    data-pagination="true"
-    data-page-size="5">
-        <caption> </caption>
-        <thead>
-            <tr>
-                <th scope="col"> URL </th>
-                <th scope="col"> Wordpress Version </th>
-                <th scope="col"> User Enumeration</thscope></th>              
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in result %}
-            <tr>
-                <td scope="row"> <a href={{item.uri_complete}} target="_blank" rel="noopener noreferrer" class="bold">{{item.uri}}</a></td>
-                <td><div><span class="badge text-bg-primary">{{item.version}}</span></div></td>
-                {% if item.user_enumeration is None %}
-                    <td><i class="fas fa-question-circle"></i></td>
-                {% elif item.user_enumeration %}
-                    <td><i class="fas fa-check" style="color: green;"></i></td> 
-                {% else %}
-                    <td><i class="fas fa-times" style="color: red;"></i></td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
+<div class="container mt-4">
+    <h2 class="mb-2 text-center">Wordpress Übersicht</h2>
+    <table id="datagrid" class="table table-striped">
+        {% render_table table %}
     </table>
 </div>
 
-{% endblock content %} 
+
+<!-- <script>
+    $(document).ready(function() {
+        $('#datagrid').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/de-DE.json"
+            }
+        });
+    }); -->
+<!-- </script> -->
+
+{% endblock content %}
