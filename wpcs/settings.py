@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     "app.apps.AppConfig",
     'django_celery_results',
     'django_celery_beat',
-    'django_tables2'
+    'django_tables2',
+    'django_filters',
+     "crispy_forms",
+    "crispy_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -140,3 +143,6 @@ DJANGO_TABLES2_TABLE_ATTRS =  {
     },
     'tr': "text-center align-middle"
 }
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

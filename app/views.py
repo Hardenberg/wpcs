@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from . models import *
 from .tables.wordpress_table import WordpressTable
-from .tables.dns_table import DNSTable
+from .tables.dns_table import DNSTable, DNSFilter
 from django_tables2 import SingleTableView
 
 def app(request):
@@ -21,6 +21,7 @@ class DNSListView(SingleTableView):
     model = DNS
     table_class = DNSTable
     template_name = "app/dns.html"
+    filterset_class = DNSFilter
 
 class WordpressListView(SingleTableView):
     model = Wordpress
@@ -29,3 +30,6 @@ class WordpressListView(SingleTableView):
 
     def get_queryset(self):
         return Wordpress.objects.all().exclude(version = '-').exclude(version__isnull=True)
+    
+def crm(request):
+    return render(request, 'app/crm.html')

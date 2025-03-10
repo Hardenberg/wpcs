@@ -7,4 +7,3 @@ class WordpressTable(tables.Table):
         model = Wordpress
         template_name = "django_tables2/bootstrap5.html"
         fields = ("dnsId.hostname", "version", "user_enumeration", "date")
-        
