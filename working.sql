@@ -1,2 +1,12 @@
--- SQLite
-select * from app_dns  limit 10
+-- -- SQLite
+-- select dnsId_id, count() as d from app_wordpress 
+-- where 1=1 
+-- group by dnsID_id
+-- having d > 1
+
+-- DELETE FROM app_wordpress 
+-- WHERE rowid NOT IN (
+--     SELECT MIN(rowid) 
+--     FROM app_wordpress 
+--     GROUP BY dnsId_id
+-- );

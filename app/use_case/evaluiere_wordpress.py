@@ -25,7 +25,10 @@ def execute():
         hostname = 'https://'+ item.dns + '.'+ item.tld
         checked = check_Wordpress(hostname)
         
-        Wordpress.objects.create(
+        wordpress, created = Wordpress.objects.get_or_create(
             version=checked,
             dnsId_id=item.id
         )
+        if not created:
+            wordpress.version = checked
+            wordpress.save

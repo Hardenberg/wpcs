@@ -2,7 +2,17 @@ from django.shortcuts import render
 from . models import *
 
 def app(request):
-    return render(request, 'app/app.html')
+    dns = DNS.objects.count()
+    https = Http.objects.filter(https = True).count()
+    wordpress = Wordpress.objects.all().exclude(version = '-').count()
+    user_enum = Wordpress.objects.filter(user_enumeration = True).count()
+    ctx = {
+        'valid_dns': dns,
+        'https': https,
+        'wordpress': wordpress,
+        'user_enum': user_enum
+    }
+    return render(request, 'app/app.html', ctx)
 
 def dns(request):
     result = []
@@ -32,7 +42,9 @@ def wordpress(request):
             continue
         result.append({
             'uri': dns.dns + '.' + dns.tld,
-            'version': item.version
+            'uri_complete': 'https://'+dns.dns + '.' + dns.tld,
+            'version': item.version,
+            'user_enumeration':item.user_enumeration
             
         })
     print(result[0]['version'])

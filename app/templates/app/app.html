@@ -2,6 +2,108 @@
 
 {% block content %}
 
-<h2>APPd</h2>
+<div class="container-fluid p-4">
+    <h1 class="mb-4">Dashboard</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Valide DNS Einträge</h5>
+                    <p class="card-text">{{ valid_dns}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Valide DNS mit HTTPS</h5>
+                    <p class="card-text">{{https}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Anzahl Wordpress</h5>
+                    <p class="card-text">{{wordpress}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">WP User Enumeration</h5>
+                    <p class="card-text">{{user_enum}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+    <!-- <div class="row mt-4">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produkt</th>
+                        <th>Verkäufe</th>
+                        <th>Umsatz</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Produkt A</td>
+                        <td>150</td>
+                        <td>€ 15,000</td>
+                    </tr>
+                    <tr>
+                        <td>Produkt B</td>
+                        <td>200</td>
+                        <td>€ 25,000</td>
+                    </tr>
+                    <tr>
+                        <td>Produkt C</td>
+                        <td>100</td>
+                        <td>€ 10,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
+</div>
+<!-- <script>
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Januar', 'Februar', 'März', 'April'],
+            datasets: [{
+                label: 'Umsatz',
+                data: [10000, 15000, 12000, 17000],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+        }
+    });
+
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['Januar', 'Februar', 'März', 'April'],
+            datasets: [{
+                label: 'Gewinn',
+                data: [3000, 5000, 4000, 6000],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }]
+        }
+    });
+</script> -->
 
 {% endblock content %}

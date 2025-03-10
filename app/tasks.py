@@ -1,6 +1,7 @@
 from celery import shared_task
 import datetime
 from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress
+from .use_case.CVE import enumeration_user
 
 @shared_task
 def print_zeit():
@@ -23,3 +24,8 @@ def evaluate_http():
 def find_wordpress():
     print('find Wordpress')
     evaluiere_wordpress.execute()
+
+@shared_task
+def wp_user_enumeration():
+    print('User Enumeration')
+    enumeration_user.execute()
