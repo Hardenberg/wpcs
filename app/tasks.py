@@ -1,6 +1,6 @@
 from celery import shared_task
 import datetime
-from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress
+from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress, evaluiere_php_on_wordpress, evaluiere_security_txt
 from .use_case.CVE import enumeration_user
 
 @shared_task
@@ -29,3 +29,13 @@ def find_wordpress():
 def wp_user_enumeration():
     print('User Enumeration')
     enumeration_user.execute()
+
+@shared_task
+def wp_php_version():
+    print('find WP-PHP')
+    evaluiere_php_on_wordpress.execute()
+
+@shared_task
+def find_security_txt():
+    print('find security.txt')
+    evaluiere_security_txt.execute()

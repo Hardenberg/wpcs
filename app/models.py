@@ -24,6 +24,8 @@ class Http(models.Model):
     dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE)
     http = models.BooleanField()
     https = models.BooleanField()
+    has_security_txt = models.BooleanField(default=False)
+    security_txt = models.CharField(max_length=200, verbose_name="security.txt",null=True,blank=True,)
     checked = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -33,6 +35,7 @@ class Wordpress(models.Model):
     dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE, verbose_name="ID")
     version = models.CharField(max_length=200, null=False, blank=False)
     user_enumeration = models.BooleanField(null =True)
+    php = models.CharField(max_length=20, verbose_name='PHP-Version', null=True,blank=True,)
     date = models.DateTimeField(auto_now=True, verbose_name="Modified")
 
     def __str__(self):
