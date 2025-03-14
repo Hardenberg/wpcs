@@ -10,3 +10,14 @@
 --     FROM app_wordpress 
 --     GROUP BY dnsId_id
 -- );
+
+-- select dns, tld, w.date, ip from app_wordpress as w join app_dns as d  on w.dnsId_id = d.id
+-- where 1=1 
+--     and user_enumeration = 1
+--     and  d.id > 12234
+-- limit 100
+
+select * from app_wordpress
+where 1=1
+    -- and date <= "2025-03-13"
+    -- and date >= "2025-03-11"

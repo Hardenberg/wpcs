@@ -7,10 +7,10 @@ class DNS(models.Model):
     date = models.DateTimeField(auto_now=True, verbose_name="Modified")
 
     def __str__(self):
-        return super().__str__()
+        return self.hostname()
     
     def hostname(self):
-        return self.dns + '.'+ self.tld
+        return self.dns + "." + self.tld
     
 class Setting(models.Model):
     key = models.CharField(max_length=200, null=False, blank=False)
@@ -29,7 +29,7 @@ class Http(models.Model):
     checked = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return super().__str__()
+        return self.dnsId.hostname()
     
 class Wordpress(models.Model):
     dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE, verbose_name="ID")
@@ -39,12 +39,26 @@ class Wordpress(models.Model):
     date = models.DateTimeField(auto_now=True, verbose_name="Modified")
 
     def __str__(self):
-        return super().__str__()
-    
-    
-    
+        return "Wordpress " + self.version + " auf " + self.dnsId.hostname()
+
 class TLD(models.Model):
     tld = models.CharField(max_length=20, blank=False)
 
     def __str__(self):
         return self.tld
+
+class Vendor(models.Model):
+    name = models.CharField(max_length=200, null=False, blank=False)
+    mail = models.CharField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return "Vendor: " + self.name
+
+class CRM(models.Model):
+    dns = models.ForeignKey(DNS, on_delete=models.CASCADE)
+    mail = models.CharField(max_length=200, null=False, blank=False)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, verbose_name='Vendor', null=True, blank=True)
+
+    def __str__(self):
+        return self.dns.hostname() + " an " + self.mail
+    
