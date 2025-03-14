@@ -2,11 +2,14 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from . models import *
 from django.db.models import Exists, OuterRef, F
+from django.db.models import Exists, OuterRef, Subquery
 from .tables.wordpress_table import WordpressTable
 from .tables.dns_table import DNSTable, DNSFilter
 from .tables.crm_tables import CRMTable
 from django_tables2 import SingleTableView
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, get_object_or_404
+from .models import Wordpress
 
 def app(request):
     dns = DNS.objects.count()
@@ -33,10 +36,11 @@ class WordpressListView(SingleTableView):
     template_name = "app/wordpress.html"
 
     def get_queryset(self):
-        return Wordpress.objects.exclude(version='-') \
+         return Wordpress.objects.exclude(version='-') \
         .exclude(version__isnull=True) \
         .annotate(
-            has_crm=Exists(CRM.objects.filter(dns=OuterRef('dnsId')))
+            has_crm=Exists(CRM.objects.filter(dns=OuterRef('dnsId'))),
+            crm_id=Subquery(CRM.objects.filter(dns=OuterRef('dnsId')).values('id')[:1])
         )
 
 class CRMListView(SingleTableView):
@@ -60,3 +64,7 @@ def add_crm(request):
         return redirect('wordpress')  # Oder zu einer anderen Seite weiterleiten
 
     return HttpResponse("Ungültige Anfrage", status=400)
+
+def crm(request, id):
+    entry = get_object_or_404(CRM, id=id)  # Holt das Objekt oder gibt 404 zurück
+    return render(request, 'app/crm_detail.html', {'entry': entry})

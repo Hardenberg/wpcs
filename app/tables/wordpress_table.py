@@ -44,7 +44,7 @@ class WordpressTable(tables.Table):
                 </div>
             ''')
         else:
-            return mark_safe(f'''<a href="/" class="btn btn-secondary btn-sm">CRM</a>''')
+            return mark_safe(f'''<a href="/crm/{record.crm_id}" class="btn btn-secondary btn-sm">CRM</a>''')
 
     class Meta:
         model = Wordpress

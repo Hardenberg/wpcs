@@ -1,2 +1,2 @@
 def execute():
-    pass
+    print("Hello php on wordpress")
