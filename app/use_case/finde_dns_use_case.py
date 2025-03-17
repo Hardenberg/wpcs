@@ -3,34 +3,29 @@ import string
 import socket
 from ..models import TLD
 
-def get_random_length():
-    return random.randint(3, 10)
+def get_random_length(min_length=3, max_length=10):
+    return random.randint(min_length, max_length)
 
-def get_random_strings(length):
-    runner = 100
-    result = []
-    while runner > 0:
-        zeichen = string.ascii_lowercase
-        result.append(''.join(random.choices(zeichen, k=length)))
-        runner -= 1
-    return result
+def get_random_strings(length, count=100):
+    return [''.join(random.choices(string.ascii_lowercase, k=length)) for _ in range(count)]
 
 def is_valid(item, tld):
-    hostname = item + '.' + tld
+    hostname = f"{item}.{tld}"
     try:
-        ip_adresse = socket.gethostbyname(hostname)
+        ip_address = socket.gethostbyname(hostname)
         return {
-            'valid': True,
-            'hostname': item,
-            'tld': tld,
-            'ip': ip_adresse
+            "valid": True,
+            "hostname": hostname,
+            "tld": tld,
+            "ip": ip_address
         }
     except socket.gaierror as e:
         return {
-            'valid': False,
-            'hostname': "",
-            'tld': tld,
-            'ip': ""
+            "valid": False,
+            "hostname": hostname,
+            "tld": tld,
+            "ip": None,
+            "error": str(e)  # Fehler als String für Debugging-Zwecke
         }
 
 def execute():
