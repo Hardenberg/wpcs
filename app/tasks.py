@@ -1,7 +1,8 @@
 from celery import shared_task
 import datetime
-from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress, evaluiere_php_on_wordpress, evaluiere_security_txt
+from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress, evaluiere_php_on_wordpress, evaluiere_security_txt, php_version_control as app_php_version_control
 from .use_case.CVE import enumeration_user
+
 
 @shared_task
 def print_zeit():
@@ -39,3 +40,9 @@ def wp_php_version():
 def find_security_txt():
     print('find security.txt')
     evaluiere_security_txt.execute()
+
+@shared_task
+def php_version_control():
+    print('php_version_control')
+    app_php_version_control.execute()
+    

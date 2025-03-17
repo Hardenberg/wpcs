@@ -62,3 +62,12 @@ class CRM(models.Model):
     def __str__(self):
         return self.dns.hostname() + " an " + self.mail
     
+class PHPVersion(models.Model):
+    version = models.CharField(max_length=20, primary_key=True)
+    release_date = models.DateField()
+    active_support = models.DateField()
+    security_support = models.DateField()
+    end_of_life = models.DateField()
+
+    def __str__(self):
+        return self.version
