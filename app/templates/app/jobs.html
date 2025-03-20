@@ -1,0 +1,37 @@
+{% extends 'app/index.html' %}
+{% csrf_token %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='DNS' %}" class="btn btn-outline-primary w-100">
+                <i class="fas fa-network-wired"></i> Find DNS
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='HTTP' %}" class="btn btn-outline-primary w-100">
+                <i class="fas fa-globe"></i> Find HTTPs
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='WORDPRESS' %}" class="btn btn-outline-primary w-100">
+                <i class="fab fa-wordpress"></i> Find Wordpress
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='PHP' %}" class="btn btn-outline-primary w-100">
+                <i class="fab fa-php"></i> Finde PHP WP
+            </a>
+        </div>
+    </div>
+    <div class="row g-3 mt-3">
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='USER_ENUM' %}" class="btn btn-outline-primary w-100">
+                <i class="fas fa-users"></i> Find User Enum
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

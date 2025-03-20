@@ -38,12 +38,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "app.apps.AppConfig",
+    "mailservice.apps.MailserviceConfig",
     'django_celery_results',
     'django_celery_beat',
     'django_tables2',
     'django_filters',
      "crispy_forms",
     "crispy_bootstrap5",
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -54,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        'django.contrib.sessions.middleware.SessionMiddleware',
+
 ]
 
 ROOT_URLCONF = "wpcs.urls"
@@ -159,3 +164,6 @@ DJANGO_TABLES2_TABLE_ATTRS =  {
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+MAILGUN_API_KEY = "787602825c78e1653696905a7f32d106-3d4b3a2a-75d741e3"
+MAILGUN_DOMAIN = "sandboxb58e401d77f14faab182763779a87765.mailgun.org"

@@ -17,7 +17,8 @@
 --     and  d.id > 12234
 -- limit 100
 
-select * from app_wordpress
+select * from app_dns
 where 1=1
+    and dns like "%.%"
     -- and date <= "2025-03-13"
     -- and date >= "2025-03-11"

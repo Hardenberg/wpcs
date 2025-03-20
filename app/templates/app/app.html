@@ -8,32 +8,32 @@
         <div class="col-md-3">
             <div class="card text-bg-primary mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Valide DNS Einträge</h5>
-                    <p class="card-text">{{ valid_dns}}</p>
+                    <h5 class="card-title"><i class="fas fa-check-circle"></i> Valide DNS Einträge</h5>
+                    <p class="card-text">{{ valid_dns }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card text-bg-success mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Valide DNS mit HTTPS</h5>
-                    <p class="card-text">{{https}}</p>
+                    <h5 class="card-title"><i class="fas fa-lock"></i> Valide DNS mit HTTPS</h5>
+                    <p class="card-text">{{ https }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card text-bg-warning mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">Anzahl Wordpress</h5>
-                    <p class="card-text">{{wordpress}}</p>
+                    <h5 class="card-title"><i class="fab fa-wordpress"></i> Anzahl Wordpress</h5>
+                    <p class="card-text">{{ wordpress }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card text-bg-danger mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">WP User Enumeration</h5>
-                    <p class="card-text">{{user_enum}}</p>
+                    <h5 class="card-title"><i class="fas fa-users"></i> WP User Enumeration</h5>
+                    <p class="card-text">{{ user_enum }}</p>
                 </div>
             </div>
         </div>
@@ -46,55 +46,21 @@
             <canvas id="lineChart"></canvas>
         </div>
     </div>
-    <!-- <div class="row mt-4">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Produkt</th>
-                        <th>Verkäufe</th>
-                        <th>Umsatz</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Produkt A</td>
-                        <td>150</td>
-                        <td>€ 15,000</td>
-                    </tr>
-                    <tr>
-                        <td>Produkt B</td>
-                        <td>200</td>
-                        <td>€ 25,000</td>
-                    </tr>
-                    <tr>
-                        <td>Produkt C</td>
-                        <td>100</td>
-                        <td>€ 10,000</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div> -->
 </div>
-<!-- <script>
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-        type: 'bar',
-        data: {
+<!-- 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Beispiel-Daten (ersetze durch Daten aus dem Backend)
+        const barData = {
             labels: ['Januar', 'Februar', 'März', 'April'],
             datasets: [{
                 label: 'Umsatz',
                 data: [10000, 15000, 12000, 17000],
                 backgroundColor: 'rgba(54, 162, 235, 0.5)'
             }]
-        }
-    });
+        };
 
-    const lineCtx = document.getElementById('lineChart').getContext('2d');
-    new Chart(lineCtx, {
-        type: 'line',
-        data: {
+        const lineData = {
             labels: ['Januar', 'Februar', 'März', 'April'],
             datasets: [{
                 label: 'Gewinn',
@@ -102,7 +68,57 @@
                 borderColor: 'rgba(75, 192, 192, 1)',
                 fill: false
             }]
-        }
+        };
+
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: barData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Umsatz (€)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monatlicher Umsatz'
+                    }
+                }
+            }
+        });
+
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: lineData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Gewinn (€)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monatlicher Gewinn'
+                    }
+                }
+            }
+        });
     });
 </script> -->
 

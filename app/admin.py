@@ -1,6 +1,12 @@
 from django.contrib import admin
+from django.http import HttpResponse
 from .models import *
-# Register your models here.
+from django.shortcuts import render, redirect
+from django.urls import path, reverse
+from django.contrib.auth.decorators import login_required
+from django.urls import path
+from django.contrib import messages
+from django.utils.html import format_html
 
 
 admin.site.register(DNS)

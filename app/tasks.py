@@ -13,6 +13,7 @@ def print_zeit():
 @shared_task
 def find_valid_dns():
     list = finde_dns_use_case.execute()
+    print(len(list))
     schreibe_dns_use_case.execute(list)
     return list
 
