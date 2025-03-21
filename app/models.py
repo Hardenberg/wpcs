@@ -37,6 +37,8 @@ class Wordpress(models.Model):
     user_enumeration = models.BooleanField(null =True)
     php = models.CharField(max_length=20, verbose_name='PHP-Version', null=True,blank=True,)
     date = models.DateTimeField(auto_now=True, verbose_name="Modified")
+    xml_rpc = models.BooleanField(null=True, blank=True)
+    open_directory = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return "Wordpress " + self.version + " auf " + self.dnsId.hostname()

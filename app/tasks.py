@@ -1,7 +1,7 @@
 from celery import shared_task
 import datetime
 from .use_case import finde_dns_use_case, schreibe_dns_use_case, evaluiere_http, evaluiere_wordpress, evaluiere_php_on_wordpress, evaluiere_security_txt, php_version_control as app_php_version_control
-from .use_case.CVE import enumeration_user
+from .use_case.CVE import enumeration_user, wp_xmlrpc as wp_xmlrpc_use_case, open_directory
 
 
 @shared_task
@@ -46,4 +46,13 @@ def find_security_txt():
 def php_version_control():
     print('php_version_control')
     app_php_version_control.execute()
-    
+
+@shared_task
+def wp_xmlrpc():
+    print('wp_xmlrpc')
+    wp_xmlrpc_use_case.execute()
+
+@shared_task
+def find_open_directory():
+    print('open_directory')
+    open_directory.execute()

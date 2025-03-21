@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from .tasks import evaluate_http, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration
+from .tasks import evaluate_http, find_open_directory, find_security_txt, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration, wp_xmlrpc
 from . models import *
 from django.db.models import Exists, OuterRef, F
 from django.db.models import Exists, OuterRef, Subquery
@@ -24,7 +24,8 @@ def app(request):
         'valid_dns': dns,
         'https': https,
         'wordpress': wordpress,
-        'user_enum': user_enum
+        'user_enum': user_enum,
+        'xml_rpc': Wordpress.objects.filter(xml_rpc = True).count(),
     }
     return render(request, 'app/app.html', ctx)
 
@@ -78,26 +79,22 @@ def jobs(request):
 
 def jobs_aktionen(request, aktion):
     print(aktion)
-    if aktion == 'DNS':
-        find_valid_dns()
-        ergebnis = "ausgeführt"
-        messages.success(request, f"Aktion '{aktion}' erfolgreich ausgeführt: {ergebnis}")
-    elif aktion == 'HTTP':
-        evaluate_http()
-        ergebnis = "ausgeführt"
-        messages.success(request, f"Aktion '{aktion}' erfolgreich ausgeführt: {ergebnis}")
-    elif aktion == 'WORDPRESS':
-        find_wordpress()
-        ergebnis = "ausgeführt"
-        messages.success(request, f"Aktion '{aktion}' erfolgreich ausgeführt: {ergebnis}")
-    elif aktion == 'PHP':
-        wp_php_version()
-        ergebnis = "ausgeführt"
-        messages.success(request, f"Aktion '{aktion}' erfolgreich ausgeführt: {ergebnis}")
-    elif aktion == 'USER_ENUM':
-        wp_user_enumeration()
+    aktionen_map = {
+        'DNS': find_valid_dns,
+        'HTTP': evaluate_http,
+        'WORDPRESS': find_wordpress,
+        'PHP': wp_php_version,
+        'USER_ENUM': wp_user_enumeration,
+        'SECU_TXT': find_security_txt,
+        'XML_RPC': wp_xmlrpc,
+        'OPEN_DICT': find_open_directory
+    }
+
+    if aktion in aktionen_map:
+        aktionen_map[aktion]()  # Ruft die Funktion dynamisch auf
         ergebnis = "ausgeführt"
         messages.success(request, f"Aktion '{aktion}' erfolgreich ausgeführt: {ergebnis}")
     else:
-        messages.success(request, f"Ungültige Aktion: '{aktion}'")
+        messages.error(request, f"Ungültige Aktion: '{aktion}'")
+
     return render(request, 'app/jobs.html')

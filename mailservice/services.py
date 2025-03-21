@@ -11,7 +11,7 @@ class MailgunService:
             response = requests.post(
                 f"https://api.mailgun.net/v3/{settings.MAILGUN_DOMAIN}/messages",
                 auth=("api", settings.MAILGUN_API_KEY),
-                data={"from": "Mailgun Sandbox <postmaster@sandboxb58e401d77f14faab182763779a87765.mailgun.org>",
+                data={"from": f"Mailgun Sandbox <postmaster@{settings.MAILGUN_DOMAIN}.mailgun.org>",
 			"to": "Alrik Schnapke <alrik.schnapke@gmail.com>",
   			"subject": "Hello Alrik Schnapke",
   			"text": "Congratulations Alrik Schnapke, you just sent an email with Mailgun! You are truly awesome!"})

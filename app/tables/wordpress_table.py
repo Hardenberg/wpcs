@@ -1,10 +1,18 @@
 import django_tables2 as tables
 from ..models import Wordpress
 from django.utils.safestring import mark_safe
+from django.utils.timezone import localtime
 
 class WordpressTable(tables.Table):
     version = tables.Column(attrs={"td": {"class": "badge text-bg-primary w-75 h-100 m-1"}}, verbose_name="Version")
     CRM = tables.Column(empty_values=(), verbose_name="Aktion")
+    date = tables.Column(verbose_name="Geändert")
+
+    def render_date(self, value):
+        """Formatiert das Datum in TT.MM.YYYY HH:MM"""
+        if value:
+            return localtime(value).strftime("%d.%m.%Y %H:%M")
+        return "-"
 
     def render_CRM(self, value, record):
         if not record.has_crm:
@@ -86,5 +94,5 @@ class WordpressTable(tables.Table):
     class Meta:
         model = Wordpress
         template_name = "django_tables2/bootstrap5.html"
-        fields = ("dnsId.hostname", "version", "user_enumeration", "php", "date", "CRM")
+        fields = ("dnsId.hostname", "version", "user_enumeration", "php", "xml_rpc","open_directory", "date", "CRM")
         verbose_name_plural = "Wordpress Einträge"
