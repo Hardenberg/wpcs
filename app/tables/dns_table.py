@@ -6,7 +6,7 @@ import django.utils.html as html
 class DNSTable(tables.Table):
     ip = tables.Column(attrs={"td": {"class": "badge text-bg-primary w-75 h-100 m-1"}}, verbose_name="IP-Adresse")
     security_txt = tables.Column(verbose_name="security.txt", empty_values=(), attrs={"td": {"class": "short-column"}})
-
+    has_subdomains = tables.Column(verbose_name="Subdomains")
     def render_security_txt(self, record):
         http = Http.objects.filter(dnsId=record.id).first()
         if http and http.has_security_txt:
@@ -19,7 +19,7 @@ class DNSTable(tables.Table):
     class Meta:
         model = DNS
         template_name = "django_tables2/bootstrap5.html"
-        fields = ("dns", "tld", "ip", "security_txt", "date")
+        fields = ("dns", "tld", "ip","has_subdomains", "security_txt", "date")
         verbose_name_plural = "DNS Einträge"
 
 class DNSFilter(filters.FilterSet):
@@ -30,4 +30,4 @@ class DNSFilter(filters.FilterSet):
 
     class Meta:
         model = DNS
-        fields = ["dns", "tld", "ip", "date"]
+        fields = ["dns", "tld", "ip","has_subdomains", "date"]

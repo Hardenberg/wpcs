@@ -1,0 +1,42 @@
+{% extends 'app/index.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h2 class="text-center mb-4">📁 SubDomains hochladen</h2>
+
+                {% if message %}
+                    <div class="alert alert-success text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Datei auswählen</label>
+                        <input type="file" name="file" id="file" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tld" class="form-label">Top-Level-Domain auswählen</label>
+                        <select name="tld" id="tld" class="form-select" required>
+                            <option value="" disabled selected>Wähle eine TLD...</option>
+                            <option value="ALLE">#alle</option>
+                            {% for item in tlds %}
+                                <option value="{{ item }}">.{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            📤 Hochladen
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

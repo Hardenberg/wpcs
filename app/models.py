@@ -5,6 +5,7 @@ class DNS(models.Model):
     tld = models.CharField(max_length=10, null=False,blank=False, verbose_name="TLD")
     ip = models.CharField(max_length=200, null=False,blank=False, verbose_name="IP-Adress")
     date = models.DateTimeField(auto_now=True, verbose_name="Modified")
+    has_subdomains = models.BooleanField(null=True,blank=True)
 
     def __str__(self):
         return self.hostname()
@@ -73,3 +74,16 @@ class PHPVersion(models.Model):
 
     def __str__(self):
         return self.version
+
+class SubDomains(models.Model):
+    dnsId = models.ForeignKey(DNS, on_delete=models.CASCADE)
+    subdomain = models.CharField(max_length=200, null=False, blank=False)
+    ip = models.CharField(max_length=200, null=False, blank=False)
+    date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subdomain
+
+class SubdomainsTop100Liste(models.Model):
+    sub = models.CharField(max_length=200, null=False, blank=False)
+    tld = models.ForeignKey(TLD, on_delete=models.CASCADE)

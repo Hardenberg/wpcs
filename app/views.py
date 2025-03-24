@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from .tasks import evaluate_http, find_open_directory, find_security_txt, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration, wp_xmlrpc
+from .tasks import evaluate_http, find_open_directory, find_security_txt, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration, wp_xmlrpc, finde_subdomains
 from . models import *
 from django.db.models import Exists, OuterRef, F
 from django.db.models import Exists, OuterRef, Subquery
@@ -34,6 +34,7 @@ class DNSListView(SingleTableView):
     table_class = DNSTable
     template_name = "app/dns.html"
     filterset_class = DNSFilter
+    
 
 class WordpressListView(SingleTableView):
     model = Wordpress
@@ -87,7 +88,8 @@ def jobs_aktionen(request, aktion):
         'USER_ENUM': wp_user_enumeration,
         'SECU_TXT': find_security_txt,
         'XML_RPC': wp_xmlrpc,
-        'OPEN_DICT': find_open_directory
+        'OPEN_DICT': find_open_directory,
+        'SUBDOMAINS': finde_subdomains
     }
 
     if aktion in aktionen_map:
@@ -98,3 +100,41 @@ def jobs_aktionen(request, aktion):
         messages.error(request, f"Ungültige Aktion: '{aktion}'")
 
     return render(request, 'app/jobs.html')
+
+
+def subdomains_fileUpload(request):
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+        selected_tld = request.POST.get("tld", "").strip().lower()
+
+        if not file:
+            messages.error(request, "⚠️ Bitte eine Datei auswählen.")
+            return render(request, 'app/subdomain_upload.html', {'tlds': TLD.objects.all()})
+
+        if not selected_tld:
+            messages.error(request, "⚠️ Bitte eine TLD auswählen.")
+            return render(request, 'app/subdomain_upload.html', {'tlds': TLD.objects.all()})
+
+        try:
+            tld = TLD.objects.get(tld=selected_tld)
+        except TLD.DoesNotExist:
+            messages.error(request, f"⚠️ TLD '{selected_tld}' existiert nicht.")
+            return render(request, 'app/subdomain_upload.html', {'tlds': TLD.objects.all()})
+
+        if file.name.endswith('.txt'):
+            content = file.read().decode('utf-8')
+            subdomains = content.split('\n')
+
+            for subdomain in subdomains:
+                subdomain = subdomain.strip().lower()
+                if subdomain:
+                    SubdomainsTop100Liste.objects.get_or_create(sub=subdomain, tld=tld)
+
+            messages.success(request, f"Datei erfolgreich hochgeladen und Subdomains hinzugefügt.")
+        else:
+            messages.error(request, "⚠️ Bitte eine .txt-Datei hochladen.")
+    
+    ctx = {
+        'tlds': TLD.objects.all()
+    }
+    return render(request, 'app/subdomain_upload.html', ctx)

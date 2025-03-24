@@ -20,6 +20,9 @@
               <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.url_name == 'jobs' %}active{% endif %}" href="{% url 'jobs' %}">Job</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'file_upload' %}active{% endif %}" href="{% url 'file_upload' %}">Upload</a>
+            </li>
           </ul>
       </div>
   </div>

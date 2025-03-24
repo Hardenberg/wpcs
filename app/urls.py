@@ -11,5 +11,6 @@ urlpatterns =[
     path('crm/<int:id>/', views.crm, name='crm_entry'),
     path('jobs', views.jobs, name='jobs'),
     path('jobs/aktion/<str:aktion>/', views.jobs_aktionen, name='jobs_aktionen'),
+    path('sub_domain_upload/', views.subdomains_fileUpload, name='file_upload'),
 
 ]
