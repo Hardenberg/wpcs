@@ -25,7 +25,6 @@ def process_dns_entry(item_id):
         hostname = f"https://{item.dns}.{item.tld}"
         version = check_wordpress(hostname)
 
-        # WordPress-Eintrag erstellen
         Wordpress.objects.create(dnsId_id=item.id, version=version)
     
     return item.id, version
@@ -38,5 +37,5 @@ def execute():
 
         for future in as_completed(future_to_item):
             item_id, version = future.result()
-            if version:
+            if version and version != '-':
                 print(f"DNS-ID {item_id} → WordPress-Version: {version}")

@@ -1,56 +1,65 @@
 {% extends 'app/index.html' %}
 {% csrf_token %}
 {% block content %}
-
 <div class="container mt-4">
-    <div class="row g-3">
+    <div class="row gy-3 justify-content-center">
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='DNS' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-network-wired"></i> Find DNS
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='HTTP' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-globe"></i> Find HTTPs
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='WORDPRESS' %}" class="btn btn-outline-primary w-100">
-                <i class="fab fa-wordpress"></i> Find Wordpress
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='PHP' %}" class="btn btn-outline-primary w-100">
-                <i class="fab fa-php"></i> Finde PHP WP
+            <a href="{% url 'jobs_aktionen' aktion='COMPLETE' %}" class="btn btn-primary w-100 p-3 rounded-3">
+                <i class="fas fa-check-circle me-2"></i> KOMPLETT
             </a>
         </div>
     </div>
-    <div class="row g-3 mt-3">
+
+    <div class="row gy-3 mt-3 justify-content-center">
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='USER_ENUM' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-users"></i> Find User Enum
+            <a href="{% url 'jobs_aktionen' aktion='DNS' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-network-wired me-2"></i> Find DNS
             </a>
         </div>
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='SECU_TXT' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-file-alt"></i> Find Security.txt
+            <a href="{% url 'jobs_aktionen' aktion='HTTP' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-globe me-2"></i> Find HTTPs
             </a>
         </div>
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='XML_RPC' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-file-alt"></i> Find open XMLRPC
+            <a href="{% url 'jobs_aktionen' aktion='WORDPRESS' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fab fa-wordpress me-2"></i> Find WordPress
             </a>
         </div>
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='OPEN_DICT' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-file-alt"></i> Find open Directory
+            <a href="{% url 'jobs_aktionen' aktion='PHP' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fab fa-php me-2"></i> Finde PHP WP
             </a>
         </div>
     </div>
-    <div class="row g-3 mt-3">
+
+    <div class="row gy-3 mt-3 justify-content-center">
         <div class="col-md-3">
-            <a href="{% url 'jobs_aktionen' aktion='SUBDOMAINS' %}" class="btn btn-outline-primary w-100">
-                <i class="fas fa-file-alt"></i> Finde Subdomains
+            <a href="{% url 'jobs_aktionen' aktion='USER_ENUM' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-users me-2"></i> Find User Enum
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='SECU_TXT' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-file-alt me-2"></i> Find Security.txt
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='XML_RPC' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-file-code me-2"></i> Find open XMLRPC
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='OPEN_DICT' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-folder-open me-2"></i> Find open Directory
+            </a>
+        </div>
+    </div>
+
+    <div class="row gy-3 mt-3 justify-content-center">
+        <div class="col-md-3">
+            <a href="{% url 'jobs_aktionen' aktion='SUBDOMAINS' %}" class="btn btn-light w-100 p-3 rounded-3">
+                <i class="fas fa-sitemap me-2"></i> Finde Subdomains
             </a>
         </div>
     </div>

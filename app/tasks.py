@@ -35,8 +35,8 @@ def print_zeit():
 
 @shared_task
 @measure_runtime
-def find_valid_dns():
-    list = finde_dns_use_case.execute()
+def find_valid_dns(minimal = 0):
+    list = finde_dns_use_case.execute(minimal)
     print(len(list))
     schreibe_dns_use_case.execute(list)
     return list
@@ -95,3 +95,18 @@ def finde_subdomains():
     logger.info('subdomains')
     subdomains_use_case.execute()
     
+@shared_task
+@measure_runtime
+def complete():
+    # print_zeit()
+    find_valid_dns(100)
+    evaluate_http()
+    find_wordpress()
+    wp_user_enumeration()
+    wp_php_version()
+    # find_security_txt()
+    # php_version_control()
+    wp_xmlrpc()
+    find_open_directory()
+    # finde_subdomains()
+    logger.info('Complete')

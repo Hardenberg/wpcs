@@ -3,26 +3,80 @@ from urllib.parse import urljoin
 from django.db import IntegrityError
 from ...models import Wordpress
 import textwrap
+import re
+
+def is_wp_config(content: str) -> bool:
+    wp_keys = [
+        "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_HOST",
+        "AUTH_KEY", "SECURE_AUTH_KEY", "LOGGED_IN_KEY", "NONCE_KEY"
+    ]
+    if any(key in content for key in wp_keys):
+        return True
+    if re.search(r"define\(['\"](DB_[A-Z_]+|AUTH_KEY|SECURE_AUTH_KEY)['\"],\s*['\"].+['\"]\)", content):
+        print("wp-config gefunden")
+        return True
+    return False
+
+def is_htaccess(content: str) -> bool:
+    htaccess_keys = [
+        "RewriteEngine", "RewriteRule", "RewriteCond", "Options",
+        "Deny from", "Allow from", "AuthType", "AuthName",
+        "Require", "Order", "Header set", "SetEnvIf"
+    ]
+    
+    if any(key in content for key in htaccess_keys):
+        return True
+
+    patterns = [
+        r"RewriteEngine\s+(on|off)",            # Aktivierung der Rewrite Engine
+        r"RewriteRule\s+\^?.+\s+\S+",           # RewriteRule mit Pfaden
+        r"RewriteCond\s+%?\{\w+\}\s+\[?.+\]?",  # RewriteCond mit Variablen
+        r"Options\s+(-|\+)?\w+",                # Apache-Optionen setzen
+        r"Deny from\s+\S+",                     # Zugriff verweigern
+        r"Allow from\s+\S+",                    # Zugriff erlauben
+        r"AuthType\s+\w+",                      # Authentifizierungstyp
+        r"AuthName\s+\".+?\"",                  # Authentifizierungsname
+        r"Require\s+\w+",                       # Zugriffsbeschränkung
+        r"Header\s+set\s+\S+",                  # HTTP-Header setzen
+        r"SetEnvIf\s+\w+\s+\S+"                 # Umgebungsvariablen setzen
+    ]
+    
+    if any(re.search(pattern, content, re.IGNORECASE) for pattern in patterns):
+        print("htaccess gefunden")
+        return True
+
+    return False
 
 def check_directory_listing(base_url, file_list, timeout=10):
     for file_name in file_list:
         file_url = urljoin(base_url, file_name)
         
         try:
+            head_response = requests.head(file_url, timeout=timeout, allow_redirects=True)
+            if head_response.status_code != 200:
+                continue  # Datei existiert nicht oder ist nicht erreichbar
+            
             response = requests.get(file_url, timeout=timeout)
-            if response.status_code >= 200 and response.status_code < 300:
-                print(f"Gefunden: {file_url} (Status: {response.status_code})")
-                print(textwrap.shorten(response.text, width=100, placeholder="..."))
-                if (len(response.text)) > 0:
+            if response.status_code == 200 and response.text.strip():
+                if (response.text.lower().startswith("<!DOCTYPE html>")):
+                    continue
+                  # Inhalt vorhanden
+                if is_htaccess(response.text) or is_wp_config(response.text):
+                    preview = textwrap.shorten(response.text, width=50, placeholder="...")
+                    print(f"🔴 Sensible Datei gefunden: {file_url} -> {preview}")
                     return True
-            else:
-                continue
+        
         except requests.exceptions.Timeout:
+            print(f"⚠️ Timeout bei {file_url}")
+            continue
+        except requests.exceptions.ConnectionError:
+            print(f"❌ Verbindungsfehler bei {file_url}")
             continue
         except requests.exceptions.RequestException as e:
+            print(f"❗ Unbekannter Fehler bei {file_url}: {e}")
             continue
 
-    return False  
+    return False
 
 def resolve_directory(base_url, timeout=10):
     file_list = [
@@ -40,16 +94,12 @@ def execute():
     for item in workinglist:
         dns = item.dnsId
         hostname = f"https://{dns.dns}.{dns.tld}"
-        
-        result = resolve_directory(hostname, timeout=10)  
-        print(f"Verzeichnisauflösung für {hostname}: {result}")
-        
+        result = resolve_directory(hostname, timeout=10) 
         item.open_directory = result
         updates.append(item)
 
     if updates:
         try:
             Wordpress.objects.bulk_update(updates, ['open_directory'])
-            print(f"Erfolgreich {len(updates)} Einträge aktualisiert.")
         except IntegrityError as e:
             print(f"Fehler beim Aktualisieren der Einträge: {e}")

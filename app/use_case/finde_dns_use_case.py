@@ -6,7 +6,7 @@ from ..models import TLD
 def get_random_length(min_length=3, max_length=7):
     return random.randint(min_length, max_length)
 
-def get_random_strings(length, count=100):
+def get_random_strings(length, count=500):
     return [''.join(random.choices(string.ascii_lowercase, k=length)) for _ in range(count)]
 
 def is_valid(item, tld):
@@ -29,17 +29,21 @@ def is_valid(item, tld):
             "error": str(e)  # Fehler als String für Debugging-Zwecke
         }
 
-def execute():
-    tlds = TLD.objects.all()
+def execute(minimal = 0):
     result = []
-    length = get_random_length()
-    print('find DNS with len ' + str(length) )
-    list = get_random_strings(length)
-    for item in list:
-        for tld in tlds:
-            valid = is_valid(item, tld.tld)
-            if not valid['valid']:
-                continue
-            result.append(valid)
-    print('find DNS with len ' + str(length) + ' done')
-    return result    
+    tlds = TLD.objects.all()
+
+    while True:
+        length = get_random_length()
+        print('find DNS with len ' + str(length) )
+        list = get_random_strings(length)
+        for item in list:
+            for tld in tlds:
+                valid = is_valid(item, tld.tld)
+                if not valid['valid']:
+                    continue
+                result.append(valid)
+
+        print('find DNS with len ' + str(length) + ' done')
+        if len(result) >= minimal:
+            return result  

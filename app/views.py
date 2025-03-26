@@ -1,7 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 
-from .tasks import evaluate_http, find_open_directory, find_security_txt, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration, wp_xmlrpc, finde_subdomains
+from .tasks import complete, evaluate_http, find_open_directory, find_security_txt, find_valid_dns, find_wordpress, wp_php_version, wp_user_enumeration, wp_xmlrpc, finde_subdomains
 from . models import *
 from django.db.models import Exists, OuterRef, F
 from django.db.models import Exists, OuterRef, Subquery
@@ -67,13 +67,24 @@ def add_crm(request):
         # Hier würdest du das CRM-Objekt speichern oder verarbeiten
         CRM.objects.get_or_create(mail=email, dns_id=dns_id)
 
-        return redirect('wordpress')  # Oder zu einer anderen Seite weiterleiten
+        return JsonResponse({'success': True, 'redirect_url': '/wordpress'}) # Oder zu einer anderen Seite weiterleiten
 
-    return HttpResponse("Ungültige Anfrage", status=400)
+    return JsonResponse({'success': False, 'error': 'Ungültige Anfrage'}, status=400)
 
 def crm(request, id):
-    entry = get_object_or_404(CRM, id=id)  # Holt das Objekt oder gibt 404 zurück
-    return render(request, 'app/crm_detail.html', {'entry': entry})
+    entry = get_object_or_404(CRM, id=id) 
+    http = Http.objects.filter(dnsId=entry.dns).first()
+    wordpress = Wordpress.objects.filter(dnsId=entry.dns).first()
+    subdomains = SubDomains.objects.filter(dnsId=entry.dns)
+    bug = {
+        'user_enum': wordpress.user_enumeration if wordpress else False,
+        'xmlrpc': wordpress.xml_rpc if wordpress else False,
+        'open_dir': wordpress.open_directory if wordpress else False,
+        'user_enum_notified': False,
+        'xmlrpc_notified': False,
+        'open_dir_notified': False,
+    }
+    return render(request, 'app/crm_detail.html', {'entry': entry, 'subdomains': subdomains,'http': http, 'wordpress': wordpress, 'bug': bug})
 
 def jobs(request):
     return render(request, 'app/jobs.html')
@@ -89,7 +100,8 @@ def jobs_aktionen(request, aktion):
         'SECU_TXT': find_security_txt,
         'XML_RPC': wp_xmlrpc,
         'OPEN_DICT': find_open_directory,
-        'SUBDOMAINS': finde_subdomains
+        'SUBDOMAINS': finde_subdomains,
+        'COMPLETE': complete
     }
 
     if aktion in aktionen_map:

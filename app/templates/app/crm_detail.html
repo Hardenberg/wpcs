@@ -1,8 +1,104 @@
 {% extends 'app/index.html' %}
 {% load render_table from django_tables2 %}
 {% block content %}
-<div class="container mt-4">
-    <H1>{{entry.mail}}</H1>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center fw-bold">🛡 Kundenansicht</h2>
+
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-body p-4">
+            <h4 class="card-title text-center mb-4 fw-semibold">Kundeninformationen</h4>
+            <table class="table table-striped table-hover table-bordered rounded-3">
+                <tbody>
+                    <tr>
+                        <th class="bg-light">🌐 URL</th>
+                        <td class="text-primary fw-bold">{{ entry.dns.dns }}.{{ entry.dns.tld }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">📍 IP</th>
+                        <td class="text-primary fw-bold">{{ entry.dns.ip }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">✉️ Mail</th>
+                        <td class="text-primary">{{ entry.mail }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">🔗 HTTP verfügbar</th>
+                        <td><span class="badge bg-info text-dark px-3 py-2">{{ http.http }}</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">🔒 HTTPS verfügbar</th>
+                        <td><span class="badge bg-success px-3 py-2">{{ http.https }}</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">⚙️ WordPress</th>
+                        <td><span class="badge bg-primary px-3 py-2">{{ wordpress.version }}</span></td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">🐘 PHP</th>
+                        <td><span class="badge bg-secondary px-3 py-2">{{ wordpress.php }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3 class="mt-5 text-center fw-bold">🐞 Liste von Bugs</h3>
+    <div class="card shadow-sm mt-3 rounded-4 border-0">
+        <div class="card-body p-4">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark text-white text-center">
+                    <tr>
+                        <th>Bug</th>
+                        <th>Gefunden</th>
+                        <th>Angeschrieben</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🕵️‍♂️ User Enumeration</td>
+                        <td><span class="badge bg-success px-3 py-2">{{ bug.user_enum }}</span></td>
+                        <td><span class="badge bg-danger px-3 py-2">{{ bug.user_enum_notified }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>🔌 XMLRPC</td>
+                        <td><span class="badge bg-success px-3 py-2">{{ bug.xmlrpc }}</span></td>
+                        <td><span class="badge bg-danger px-3 py-2">{{ bug.xmlrpc_notified }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>📂 Open Directory</td>
+                        <td><span class="badge bg-success px-3 py-2">{{ bug.open_dir }}</span></td>
+                        <td><span class="badge bg-danger px-3 py-2">{{ bug.open_dir_notified }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3 class="mt-5 text-center fw-bold">🔎 Liste von Subdomains</h3>
+    <div class="card shadow-sm mt-3 rounded-4 border-0">
+        <div class="card-body p-4">
+            <table class="table table-striped table-hover table-bordered align-middle">
+                <thead class="table-primary text-white">
+                    <tr>
+                        <th class="text-center">🌍 Subdomain</th>
+                        <th class="text-center">💻 IP-Adresse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subdomain in subdomains %}
+                    <tr class="bg-light">
+                        <td class="text-center fw-semibold">{{ subdomain.subdomain }}</td>
+                        <td class="text-center text-muted">{{ subdomain.ip }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center text-muted">Keine Subdomains gefunden</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}

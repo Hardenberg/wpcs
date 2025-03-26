@@ -64,7 +64,7 @@ class WordpressTable(tables.Table):
                             .then(response => response.json())
                             .then(data => {{
                                 if (data.success) {{
-                                    window.location.reload(); // Seite neu laden oder Nachricht anzeigen
+                                    window.location.href = data.redirect_url; 
                                 }} else {{
                                     alert('Fehler beim Ausführen der Aktion.'); // Fehler anzeigen
                                 }}
