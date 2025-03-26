@@ -54,11 +54,11 @@ def check_directory_listing(base_url, file_list, timeout=10):
         try:
             head_response = requests.head(file_url, timeout=timeout, allow_redirects=True)
             if head_response.status_code != 200:
-                continue  # Datei existiert nicht oder ist nicht erreichbar
+                continue  # Datei existiert nicht oder ist nicht erreichb4ar
             
             response = requests.get(file_url, timeout=timeout)
             if response.status_code == 200 and response.text.strip():
-                if (response.text.lower().startswith("<!DOCTYPE html>")):
+                if (response.text.lower().startswith("<!doctype html>")):
                     continue
                   # Inhalt vorhanden
                 if is_htaccess(response.text) or is_wp_config(response.text):
