@@ -1,10 +1,12 @@
+
 import requests
 import re
 from ..models import Wordpress
-
+import logging
+logger = logging.getLogger('django')
 def execute():
     workingList = Wordpress.objects.filter(php__isnull=True).exclude(version='-')[:100]
-    print(f'Processing {len(workingList)} items')
+    logger.info(f'Processing {len(workingList)} items')
     for item in workingList:
         url = f'https://{item.dnsId.hostname()}'
         php_version = get_best_php_version(url)

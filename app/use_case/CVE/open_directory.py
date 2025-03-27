@@ -1,3 +1,4 @@
+import logging
 import requests
 from urllib.parse import urljoin
 from django.db import IntegrityError
@@ -5,6 +6,7 @@ from ...models import Wordpress
 import textwrap
 import re
 
+logger = logging.getLogger('django')
 def is_wp_config(content: str) -> bool:
     wp_keys = [
         "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_HOST",
@@ -13,7 +15,7 @@ def is_wp_config(content: str) -> bool:
     if any(key in content for key in wp_keys):
         return True
     if re.search(r"define\(['\"](DB_[A-Z_]+|AUTH_KEY|SECURE_AUTH_KEY)['\"],\s*['\"].+['\"]\)", content):
-        print("wp-config gefunden")
+        logger.info("wp-config gefunden")
         return True
     return False
 
@@ -42,7 +44,7 @@ def is_htaccess(content: str) -> bool:
     ]
     
     if any(re.search(pattern, content, re.IGNORECASE) for pattern in patterns):
-        print("htaccess gefunden")
+        logger.info("htaccess gefunden")
         return True
 
     return False
@@ -63,17 +65,17 @@ def check_directory_listing(base_url, file_list, timeout=10):
                   # Inhalt vorhanden
                 if is_htaccess(response.text) or is_wp_config(response.text):
                     preview = textwrap.shorten(response.text, width=50, placeholder="...")
-                    print(f"🔴 Sensible Datei gefunden: {file_url} -> {preview}")
+                    logger.info(f"🔴 Sensible Datei gefunden: {file_url} -> {preview}")
                     return True
         
         except requests.exceptions.Timeout:
-            print(f"⚠️ Timeout bei {file_url}")
+            logger.info(f"⚠️ Timeout bei {file_url}")
             continue
         except requests.exceptions.ConnectionError:
-            print(f"❌ Verbindungsfehler bei {file_url}")
+            logger.info(f"❌ Verbindungsfehler bei {file_url}")
             continue
         except requests.exceptions.RequestException as e:
-            print(f"❗ Unbekannter Fehler bei {file_url}: {e}")
+            logger.info(f"❗ Unbekannter Fehler bei {file_url}: {e}")
             continue
 
     return False
@@ -88,7 +90,7 @@ def resolve_directory(base_url, timeout=10):
 
 def execute():
     workinglist = Wordpress.objects.filter(open_directory=None).exclude(version='-').select_related('dnsId')
-    print(f"{len(workinglist)} WordPress-Instanzen zu prüfen")
+    logger.info(f"{len(workinglist)} WordPress-Instanzen zu prüfen")
     
     updates = []
     for item in workinglist:
@@ -102,4 +104,4 @@ def execute():
         try:
             Wordpress.objects.bulk_update(updates, ['open_directory'])
         except IntegrityError as e:
-            print(f"Fehler beim Aktualisieren der Einträge: {e}")
+            logger.info(f"Fehler beim Aktualisieren der Einträge: {e}")

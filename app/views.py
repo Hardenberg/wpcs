@@ -59,7 +59,6 @@ def crm(request):
 
 @csrf_exempt 
 def add_crm(request):
-    print(request.POST)
     if request.method == "POST":
         email = request.POST.get("email")
         dns_id = request.POST.get("dns_id")
@@ -90,7 +89,6 @@ def jobs(request):
     return render(request, 'app/jobs.html')
 
 def jobs_aktionen(request, aktion):
-    print(aktion)
     aktionen_map = {
         'DNS': find_valid_dns,
         'HTTP': evaluate_http,

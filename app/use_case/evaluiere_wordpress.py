@@ -3,6 +3,8 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.db import transaction
 from ..models import DNS, Wordpress
+import logging
+logger = logging.getLogger('django')
 
 def check_wordpress(url):
     try:
@@ -31,11 +33,11 @@ def process_dns_entry(item_id):
 
 def execute():
     working_list = DNS.objects.filter(wordpress__isnull=True, http__https=True).values_list("id", flat=True)
-    print(str(len(working_list)) + ' DNS to check')
+    logger.info(str(len(working_list)) + ' DNS to check')
     with ThreadPoolExecutor(max_workers=1) as executor:  # 10 gleichzeitige Threads
         future_to_item = {executor.submit(process_dns_entry, item_id): item_id for item_id in working_list}
 
         for future in as_completed(future_to_item):
             item_id, version = future.result()
             if version and version != '-':
-                print(f"DNS-ID {item_id} → WordPress-Version: {version}")
+                logger.info(f"DNS-ID {item_id} → WordPress-Version: {version}")

@@ -1,8 +1,7 @@
 import requests
 from django.conf import settings
 import logging
-
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 class MailgunService:
     @staticmethod
@@ -16,7 +15,7 @@ class MailgunService:
   			"subject": "Hello Alrik Schnapke",
   			"text": "Congratulations Alrik Schnapke, you just sent an email with Mailgun! You are truly awesome!"})
             
-            print(settings.MAILGUN_DOMAIN)
+            logger.info(settings.MAILGUN_DOMAIN)
             status_code = response.status_code
 
             if status_code == 200:

@@ -2,6 +2,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from ...models import DNS, Http, Wordpress
 import requests
 
+import logging
+logger = logging.getLogger('django')
+
 def enumeration_users_rest_api(url):
     api_url = url.rstrip('/') + '/wp-json/wp/v2/users'
 
@@ -25,7 +28,7 @@ def process_wordpress_instance(item):
 
 def execute():
     wps = Wordpress.objects.filter(user_enumeration=None).exclude(version='-')
-    print(f"{len(wps)} WordPress-Instanzen zu prüfen")
+    logger.info(f"{len(wps)} WordPress-Instanzen zu prüfen")
     runner = 0
     with ThreadPoolExecutor(max_workers=1) as executor:  # 10 gleichzeitige Threads
         future_to_item = {executor.submit(process_wordpress_instance, item): item for item in wps}
@@ -42,4 +45,4 @@ def execute():
             if result:
                 runner += 1
 
-    print(f"{runner} UserEnumeration gefunden")
+    logger.info(f"{runner} UserEnumeration gefunden")

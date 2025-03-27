@@ -1,6 +1,7 @@
 from ..models import DNS, Wordpress, Http
 import requests
-
+import logging
+logger = logging.getLogger('django')
 def check_security_txt(domain):
     paths = ["/.well-known/security.txt", "/security.txt"]
     protocols = ["https", "http"]
@@ -19,7 +20,7 @@ def check_security_txt(domain):
 def execute():
     working = Http.objects.filter(security_txt=None).select_related("dnsId")
     to_update = []
-    print(len(working))
+    logger.info(len(working))
     for item in working:
         if item.dnsId:
             hostname = item.dnsId.hostname()
@@ -29,5 +30,5 @@ def execute():
             to_update.append(item)
 
     if to_update:
-        print(f"Update {len(to_update)} security")
+        logger.info(f"Update {len(to_update)} security")
         Http.objects.bulk_update(to_update, ['has_security_txt', 'security_txt'])

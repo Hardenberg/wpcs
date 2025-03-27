@@ -4,6 +4,9 @@ from django.shortcuts import redirect
 from .utils import send_templated_email
 from .models import EmailTemplate
 
+import logging
+logger = logging.getLogger('django')
+
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
     list_display = ('name', 'subject', 'updated_at')
@@ -19,7 +22,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         context = {"name": "Alrik Schnapke"}  # Dummy-Daten für den Platzhalter
 
         response = send_templated_email(recipient, template.name, context)
-        print(response)
+        logger.info(response)
         if response:
             self.message_user(request, f"Test-Mail wurde erfolgreich an {recipient} gesendet!", messages.SUCCESS)
         else:

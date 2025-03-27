@@ -2,6 +2,8 @@ import random
 import string
 import socket
 from ..models import TLD
+import logging
+logger = logging.getLogger('django')
 
 def get_random_length(min_length=3, max_length=7):
     return random.randint(min_length, max_length)
@@ -35,7 +37,7 @@ def execute(minimal = 0):
 
     while True:
         length = get_random_length()
-        print('find DNS with len ' + str(length) )
+        logger.info('find DNS with len ' + str(length) )
         list = get_random_strings(length)
         for item in list:
             for tld in tlds:
@@ -44,6 +46,6 @@ def execute(minimal = 0):
                     continue
                 result.append(valid)
 
-        print('find DNS with len ' + str(length) + ' done')
+        logger.info('find DNS with len ' + str(length) + ' done')
         if len(result) >= minimal:
             return result  

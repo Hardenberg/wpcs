@@ -1,8 +1,10 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import logging
 from django.db import transaction
 from ..models import DNS, Http
 import socket
 
+logger = logging.getLogger('django')
 ports = [80, 443]
 
 def is_port_open(ip, port, timeout=2):
@@ -19,9 +21,10 @@ def check_open_ports(item):
         '80': is_port_open(item.ip, 80),
     }
 
+
 def execute():
     working_list = DNS.objects.filter(http__isnull=True)
-    print(f"{len(working_list)} DNS-Einträge zu prüfen.")
+    logger.info(f"{len(working_list)} DNS-Einträge zu prüfen.")
 
     results = []
     with ThreadPoolExecutor(max_workers=10) as executor:

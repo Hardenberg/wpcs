@@ -46,6 +46,7 @@ INSTALLED_APPS = [
      "crispy_forms",
     "crispy_bootstrap5",
     'rest_framework',
+    # 'app',
 
 ]
 
@@ -167,3 +168,33 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MAILGUN_API_KEY = "****"
 MAILGUN_DOMAIN = "sandboxb58e401d77f14faab182763779a87765.mailgun.org"
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

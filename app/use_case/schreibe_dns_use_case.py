@@ -1,7 +1,9 @@
 from ..models import DNS
+import logging
+logger = logging.getLogger('django')
 
 def execute(list):
-    print(str(len(list)) + ' zu schreiben')
+    logger.info(str(len(list)) + ' zu schreiben')
     for item in list:
         DNS.objects.get_or_create(
            dns=item['dns'],

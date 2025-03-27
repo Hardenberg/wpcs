@@ -87,3 +87,12 @@ class SubDomains(models.Model):
 class SubdomainsTop100Liste(models.Model):
     sub = models.CharField(max_length=200, null=False, blank=False)
     tld = models.ForeignKey(TLD, on_delete=models.CASCADE)
+
+class LogEntry(models.Model):
+    level = models.CharField(max_length=10)  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    module = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"[{self.level}] {self.timestamp}: {self.message[:50]}"

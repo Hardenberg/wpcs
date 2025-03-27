@@ -2,6 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 import logging
 from ...models import Wordpress
+import logging
+logger = logging.getLogger('django')
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +34,7 @@ def process_item(item):
 
 def execute():
     workinglist = Wordpress.objects.filter(xml_rpc=None).exclude(version='-').select_related('dnsId')
-    print(f"{len(workinglist)} WordPress-Instanzen zu prüfen")
+    logger.info(f"{len(workinglist)} WordPress-Instanzen zu prüfen")
     with ThreadPoolExecutor(max_workers=1) as executor:
         results = list(executor.map(process_item, workinglist))
 
